@@ -1,3 +1,9 @@
+// sql    
+const mysql = require('mysql')
+const pool = require('../sql/connection')
+const { handleSQLError } = require('../sql/error')
+// end sql
+
 const courses = require('../data/courses.js')
 
 const getAllCourses = (req, res) => {
