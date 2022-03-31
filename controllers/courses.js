@@ -72,6 +72,8 @@ const deleteCourse = (req, res) => {
 
     if(!deletedCourse) res.status(404).send(`Course with id ${req.params.id} does not exist`)
 
+    res.json({message: `Course with id ${req.params.id} deleted`, upatedCourses })
+
     
 }
 
@@ -79,5 +81,6 @@ module.exports = {
     getAllCourses,
     getCourse,
     createCourse,
-    updateCourse
+    updateCourse,
+    deleteCourse
 }
