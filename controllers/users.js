@@ -8,8 +8,12 @@ const users = require('../data/users.js');
 
 
 const getAllUsers = (req, res) => {
-  res.json(users)
+  pool.query(`SELECT * FROM Users`, (err, rows) => {
+    if (err) return handleSQLError(res, err)
+    return res.json(rows);
+  })
 }
+
 
 const getUser = (req, res) => {
   const user = users.find(user => user.user_id == req.params.id)
