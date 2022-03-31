@@ -16,13 +16,24 @@ const getAllUsers = (req, res) => {
 
 
 const getUser = (req, res) => {
-  const user = users.find(user => user.user_id == req.params.id)
-  // error handler if user does not exist with given id
-  if(!user) {
-  res.status(404)
-  res.send(`No user with id ${req.params.id} exists`)
-  }
-  res.json(user)
+  let sql = `SELECT * FROM Users WHERE Users.user_id = ? AND Users.user_id IS NOT NULL`
+  sql = mysql.format(sql, [req.params.id])
+  pool.query(sql, (err, rows) => {
+    if (err) return handleSQLError(res, err)
+    if(rows.length === 0) {
+      return res.status(404).send('No user found with that id')
+    }
+    return res.json(rows);
+  })
+
+  // dummy data function
+  // const user = users.find(user => user.user_id == req.params.id)
+  // // error handler if user does not exist with given id
+  // if(!user) {
+  // res.status(404)
+  // res.send(`No user with id ${req.params.id} exists`)
+  // }
+  // res.json(user)
 }
 
 const createUser = (req, res) => {
