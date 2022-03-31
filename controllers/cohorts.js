@@ -7,7 +7,10 @@ const { handleSQLError } = require('../sql/error')
 const cohorts = require('../data/cohorts')
 
 const getAllCohorts = (req, res) => {
-    res.json(cohorts)
+    pool.query('SELECT * FROM Cohorts', (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        return res.json(rows)
+    })
 }
 
 const getCohort = (req, res) => {
