@@ -4,6 +4,7 @@ const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 // end sql
 
+const bcrypt = require("bcrypt");
 const users = require('../data/users.js');
 
 
@@ -36,6 +37,23 @@ const getUser = (req, res) => {
   // res.json(user)
 }
 
+// original createUser function without auth -----
+// const createUser = (req, res) => {
+//   let user = {}
+//   const newId = users[users.length -1].user_id + 1
+  
+  
+//   user.user_id = newId
+//   user.first_name = req.body.first_name
+//   user.last_name = req.body.last_name
+//   user.email = req.body.email
+  
+//   users.push(user)
+
+//   res.json(users)
+
+// }
+
 const createUser = (req, res) => {
   let user = {}
   const newId = users[users.length -1].user_id + 1
@@ -45,11 +63,23 @@ const createUser = (req, res) => {
   user.first_name = req.body.first_name
   user.last_name = req.body.last_name
   user.email = req.body.email
+  user.password = req.body.password
+
+  // for bcrypt authentication
+  const saltRounds = 10
+  const hash = bcrypt.hashSync(password, saltRounds)
   
-  users.push(user)
+  let sql = `INSERT INTO Users VALUES (?, ?, ?, ?, ?)`
+  sql = mysql.format(sql, [user_id, first_name, last_name, email, hash])
 
-  res.json(users)
-
+  pool.query(sql, (err, row) => {
+    if (err) {
+      if (err.code === "ER_DUP_ENTRY")
+        return res.status(409).send("Email is taken")
+      return res.status(500).send("Oh no! Something went wrong")
+    }
+    res.send(`Sign-up successful. New user with id ${row.insertId} created`)
+  })
 }
 
 const updateUser = (req, res) => {
