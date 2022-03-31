@@ -11,7 +11,7 @@ class Connection {
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         // was DB_DEFAULT_SCHEMA before
-        database: process.env.DB_DATABASE_NAME
+        database: process.env.DB_DEFAULT_SCHEMA
       })
 
       return this.pool
