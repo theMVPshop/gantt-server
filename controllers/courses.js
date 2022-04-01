@@ -7,13 +7,20 @@ const { handleSQLError } = require('../sql/error')
 const courses = require('../data/courses.js')
 
 const getAllCourses = (req, res) => {
-    res.json(courses)
+    pool.query(`SELECT * FROM Courses`, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        res.json(rows)
+    })
 }
 
 const getCourse = (req, res) => {
-    const course = courses.find(course => course.course_id == req.params.id)
-    if(!course) res.send(`No course with id ${req.params.id} exists`)
-    res.json(course)
+    let sql = `SELECT * FROM Courses WHERE Courses.course_id = ?`
+    sql = mysql.format(sql, [req.params.id])
+    pool.query(sql, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        if(!rows.length) return res.status(404).send(`No course found with id ${req.params.id}`)
+        res.json(rows)
+    })
 }
 
 const createCourse = (req, res) => {

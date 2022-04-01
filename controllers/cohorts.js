@@ -4,8 +4,6 @@ const pool = require('../sql/connection')
 const { handleSQLError } = require('../sql/error')
 // end sql
 
-const cohorts = require('../data/cohorts')
-
 const getAllCohorts = (req, res) => {
     pool.query(`SELECT * FROM Cohorts`, (err, rows) => {
         if(err) return handleSQLError(res, err)
