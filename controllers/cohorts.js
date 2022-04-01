@@ -36,15 +36,14 @@ const createCohort = (req, res) => {
     })
 }
 
-// not working - why ?
 const updateCohort = (req, res) => {
-    const cohort = cohorts.find(cohort => cohort.cohort_id == req.params.id)
-    
-    cohort.cohort_name = req.body.cohort_name
-    cohort.start_date = req.body.start_date
-    cohort.end_date = req.body.end_date
+    let sql = `UPDATE Cohorts SET cohort_name = ?, start_date = ?, end_date= ? WHERE Cohorts.cohort_id = ?`
+    sql = mysql.format(sql, [req.body.cohort_name, req.body.start_date, req.body.end_date, req.params.id])
 
-    res.json(cohort)
+    pool.query(sql, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        return res.status(204).json(rows) 
+    })
 }
 
 const deleteCohort = (req, res) => {
