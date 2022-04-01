@@ -18,22 +18,33 @@ const getCohort = (req, res) => {
     sql = mysql.format(sql, [req.params.id])
     pool.query(sql, (err, rows)=> {
         if(err) return handleSQLError(res, err)
-        if(!rows.length) return res.status(404).send('cohort not found with that id')
+        if(!rows.length) return res.status(404).send(`cohort not found with id ${req.params.id}`)
         return res.json(rows) 
     })
   }
 
 const createCohort = (req, res) => {
-    let cohort = {}
-    const newID = cohorts[cohorts.length -1].cohort_id + 1 
     
-    cohort.cohort_id = newID
-    cohort.cohort_name = req.body.cohort_name
-    cohort.start_date = req.body.start_date
-    cohort.end_date = req.body.end_date
+    let sql = `INSERT INTO Cohorts(cohort_name, start_date, end_date) 
+    VALUES (?, ?, ?)`
 
-    cohorts.push(cohort)
-    res.json(cohorts)
+    sql = mysql.format(sql, [req.body.cohort_name, req.body.start_date, req.body.end_date])
+
+    pool.query(sql, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        return res.send(`New cohort created with id ${rows.insertId}`)
+    })
+
+    // let cohort = {}
+    // const newID = cohorts[cohorts.length -1].cohort_id + 1 
+    
+    // cohort.cohort_id = newID
+    // cohort.cohort_name = req.body.cohort_name
+    // cohort.start_date = req.body.start_date
+    // cohort.end_date = req.body.end_date
+
+    // cohorts.push(cohort)
+    // res.json(cohorts)
 }
 
 // not working - why ?
