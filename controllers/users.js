@@ -55,22 +55,17 @@ const getUser = (req, res) => {
 // }
 
 const createUser = (req, res) => {
-  user.first_name = req.body.first_name
-  user.last_name = req.body.last_name
-  user.email = req.body.email
-  user.password = req.body.password
+  const { first_name, last_name, email, password } = req.body
 
   // for bcrypt authentication
   const saltRounds = 10
   const hash = bcrypt.hashSync(password, saltRounds)
   
   let sql = `INSERT INTO Users VALUES (?, ?, ?, ?, ?)`
-  sql = mysql.format(sql, [user_id, first_name, last_name, email, hash])
+  sql = mysql.format(sql, [null, first_name, last_name, email, hash])
 
   pool.query(sql, (err, row) => {
     if (err) {
-      if (err.code === "ER_DUP_ENTRY")
-        return res.status(409).send("Email is taken")
       return res.status(500).send("Oh no! Something went wrong")
     }
     res.send(`Sign-up successful. New user with id ${row.insertId} created`)
