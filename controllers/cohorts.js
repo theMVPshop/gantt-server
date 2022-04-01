@@ -34,17 +34,6 @@ const createCohort = (req, res) => {
         if(err) return handleSQLError(res, err)
         return res.send(`New cohort created with id ${rows.insertId}`)
     })
-
-    // let cohort = {}
-    // const newID = cohorts[cohorts.length -1].cohort_id + 1 
-    
-    // cohort.cohort_id = newID
-    // cohort.cohort_name = req.body.cohort_name
-    // cohort.start_date = req.body.start_date
-    // cohort.end_date = req.body.end_date
-
-    // cohorts.push(cohort)
-    // res.json(cohorts)
 }
 
 // not working - why ?
