@@ -37,22 +37,6 @@ const getUser = (req, res) => {
   // res.json(user)
 }
 
-// original createUser function without auth -----
-// const createUser = (req, res) => {
-//   let user = {}
-//   const newId = users[users.length -1].user_id + 1
-  
-  
-//   user.user_id = newId
-//   user.first_name = req.body.first_name
-//   user.last_name = req.body.last_name
-//   user.email = req.body.email
-  
-//   users.push(user)
-
-//   res.json(users)
-
-// }
 
 const createUser = (req, res) => {
   const { first_name, last_name, email, password, confirm_password } = req.body
@@ -75,6 +59,52 @@ const createUser = (req, res) => {
     res.send(`Sign-up successful. New user with id ${row.insertId} created`)
   })
 }
+
+
+const loginUser = (req, res) => {
+  const { email, password } = req.body
+
+  let sql = "SELECT * FROM Users WHERE email = ?"
+  sql = mysql.format(sql, [ email ])
+
+  pool.query(sql, (err, rows) => {
+    let correctPassword
+    if (err) {
+      return res.status(500).send("Oh no! Something went wrong")
+    }
+
+    if (!rows.length) {
+      return res.status(404).send("No matching users")
+    }
+
+    const hash = rows[0].password
+    correctPassword = bcrypt.compareSync(password, hash)
+
+    if (correctPassword) {
+      // set the jwt id equal to the user_id that has been found in the database
+      const id = rows[0].user_id
+      const first_name = rows[0].first_name
+      const unsignedToken = {
+        first_name: first_name,
+        email: email,
+        id: id
+      }
+
+      const accessToken = jwt.sign(unsignedToken, jwtSecret)
+      res.cookie("our_token", accessToken, {httpOnly: true, sameSite: false})
+      return res.json({
+        msg: "Login successful",
+        accessToken, 
+        first_name, 
+        email, 
+        id 
+      })
+    } else {
+      res.status(401).send("Email and/or password are incorrect")
+    }
+  })
+}
+
 
 const updateUser = (req, res) => {
   const user = users.find(user => user.user_id == req.params.id)
@@ -102,6 +132,7 @@ module.exports = {
   getAllUsers,
   getUser,
   createUser,
+  loginUser,
   updateUser,
   deleteUser
 }
