@@ -47,9 +47,12 @@ const updateCohort = (req, res) => {
 }
 
 const deleteCohort = (req, res) => {
-    const deletedCohort = cohorts.find(cohort => cohort.cohort_id == req.params.id)
-    const updatedCohortsArray = cohorts.filter(cohort => cohort.cohort_id !== deletedCohort.cohort_id)
-    res.json({ message: `cohort with id ${req.params.id} deleted`, updatedCohortList: updatedCohortsArray })
+    let sql = `DELETE FROM ?? WHERE ?? = ?`
+    sql = mysql.format(sql, ['Cohorts','Cohorts.cohort_id', req.params.id])
+    pool.query(sql, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        return res.json({message: `deleted ${rows.affectedRows} cohort with id ${req.params.id}`})
+    })
 }
 
   module.exports = {
