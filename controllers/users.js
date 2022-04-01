@@ -55,14 +55,18 @@ const getUser = (req, res) => {
 // }
 
 const createUser = (req, res) => {
-  const { first_name, last_name, email, password } = req.body
+  const { first_name, last_name, email, password, confirm_password } = req.body
+
+  if(password !== confirm_password) {
+    return res.status(400).send("Passwords do not match")
+  }
 
   // for bcrypt authentication
   const saltRounds = 10
   const hash = bcrypt.hashSync(password, saltRounds)
   
-  let sql = `INSERT INTO Users VALUES (?, ?, ?, ?, ?)`
-  sql = mysql.format(sql, [null, first_name, last_name, email, hash])
+  let sql = `INSERT INTO Users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`
+  sql = mysql.format(sql, [ first_name, last_name, email, hash ])
 
   pool.query(sql, (err, row) => {
     if (err) {
