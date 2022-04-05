@@ -5,7 +5,9 @@ const { handleSQLError } = require('../sql/error')
 // end sql
 
 const bcrypt = require("bcrypt");
-const users = require('../data/users.js');
+const jwt = require("jsonwebtoken");
+const jwtSecret = "secret123";
+// const users = require('../data/users.js');
 
 
 const getAllUsers = (req, res) => {
@@ -64,7 +66,7 @@ const createUser = (req, res) => {
 const loginUser = (req, res) => {
   const { email, password } = req.body
 
-  let sql = "SELECT * FROM Users WHERE email = ?"
+  let sql = "SELECT user_id, first_name, email, password FROM Users WHERE email = ?"
   sql = mysql.format(sql, [ email ])
 
   pool.query(sql, (err, rows) => {
@@ -77,8 +79,10 @@ const loginUser = (req, res) => {
       return res.status(404).send("No matching users")
     }
 
-    const hash = rows[0].password
-    correctPassword = bcrypt.compareSync(password, hash)
+    if (!err && rows.length == 1) {
+      let hash = rows[0].password
+      correctPassword = bcrypt.compareSync(password, hash)
+    }
 
     if (correctPassword) {
       // set the jwt id equal to the user_id that has been found in the database
