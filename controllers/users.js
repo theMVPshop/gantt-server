@@ -55,9 +55,7 @@ const createUser = (req, res) => {
   sql = mysql.format(sql, [ first_name, last_name, email, hash ])
 
   pool.query(sql, (err, row) => {
-    if (err) {
-      return res.status(500).send("Oh no! Something went wrong")
-    }
+    if (err) return handleSQLError(res, err)
     res.send(`Sign-up successful. New user with id ${row.insertId} created`)
   })
 }
@@ -71,9 +69,7 @@ const loginUser = (req, res) => {
 
   pool.query(sql, (err, rows) => {
     let correctPassword
-    if (err) {
-      return res.status(500).send("Oh no! Something went wrong")
-    }
+    if (err) return handleSQLError(res, err)
 
     if (!rows.length) {
       return res.status(404).send("No matching users")
@@ -118,16 +114,14 @@ const updateUser = (req, res) => {
   sql = mysql.format(sql, [ body, id ])
 
   pool.query(sql, (err, row) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Oh no! Something went wrong.");
-    }
+    if (err) return handleSQLError(res, err)
     res.json({
       msg: "User updated",
       row
     })
   })
 }
+
 
 const deleteUser = (req, res) => {
   const deletedUser = users.find(user => user.user_id == req.params.id)
