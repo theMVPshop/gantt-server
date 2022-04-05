@@ -11,7 +11,7 @@ const jwtSecret = "secret123";
 
 
 const getAllUsers = (req, res) => {
-  pool.query(`SELECT * FROM Users`, (err, rows) => {
+  pool.query("SELECT * FROM Users", (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
@@ -19,7 +19,7 @@ const getAllUsers = (req, res) => {
 
 
 const getUser = (req, res) => {
-  let sql = `SELECT * FROM Users WHERE Users.user_id = ? AND Users.user_id IS NOT NULL`
+  let sql = "SELECT * FROM Users WHERE Users.user_id = ? AND Users.user_id IS NOT NULL"
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
@@ -51,7 +51,7 @@ const createUser = (req, res) => {
   const saltRounds = 10
   const hash = bcrypt.hashSync(password, saltRounds)
   
-  let sql = `INSERT INTO Users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`
+  let sql = "INSERT INTO Users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)"
   sql = mysql.format(sql, [ first_name, last_name, email, hash ])
 
   pool.query(sql, (err, row) => {
@@ -111,13 +111,22 @@ const loginUser = (req, res) => {
 
 
 const updateUser = (req, res) => {
-  const user = users.find(user => user.user_id == req.params.id)
+  const { id } = req.params
+  const { body } = req
 
-  user.first_name = req.body.first_name
-  user.last_name = req.body.last_name
-  user.email = req.body.email
+  let sql = "UPDATE Users SET ? WHERE user_id = ?"
+  sql = mysql.format(sql, [ body, id ])
 
-  res.json(user)
+  pool.query(sql, (err, row) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Oh no! Something went wrong.");
+    }
+    res.json({
+      msg: "User updated",
+      row
+    })
+  })
 }
 
 const deleteUser = (req, res) => {
