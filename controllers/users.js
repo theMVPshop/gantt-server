@@ -124,15 +124,18 @@ const updateUser = (req, res) => {
 
 
 const deleteUser = (req, res) => {
-  const deletedUser = users.find(user => user.user_id == req.params.id)
+  const { id } = req.params
 
-  if(!deletedUser) {
-    res.status(404)
-    res.send(`No user with id ${req.params.id} exists`)
-    }
-  
-  const updatedUsersArray = users.filter(user => user.user_id !== deletedUser.user_id)
-  res.json({message: `user with id ${req.params.id} deleted`, updatedUserList: updatedUsersArray})
+  let sql = "DELETE FROM Users WHERE user_id = ?"
+  sql = mysql.format(sql, [ id ])
+
+  pool.query(sql, (err, row) => {
+    if (err) return handleSQLError(res, err)
+    res.json({
+      msg: `User with id ${id} deleted`,
+      row
+    })
+  })
 }
 
 module.exports = {
