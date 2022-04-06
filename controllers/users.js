@@ -11,7 +11,7 @@ const jwtSecret = "secret123";
 
 
 const getAllUsers = (req, res) => {
-  pool.query("SELECT * FROM Users", (err, rows) => {
+  pool.query("SELECT user_id, first_name, last_name, email FROM Users", (err, rows) => {
     if (err) return handleSQLError(res, err)
     return res.json(rows);
   })
