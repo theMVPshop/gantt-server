@@ -125,12 +125,13 @@ const updateCourse = (req, res) => {
 }
 
 const deleteCourse = (req, res) => {
-    const deletedCourse = courses.find(course => course.course_id == req.params.id)
-    const upatedCourses = courses.filter(course => course.course_id !== deletedCourse.course_id)
+ let sql = 'DELETE FROM ?? WHERE ?? = ?'
+ sql = mysql.format(sql, ['Courses', 'Courses.course_id', req.params.id])
 
-    if(!deletedCourse) res.status(404).send(`Course with id ${req.params.id} does not exist`)
-
-    res.json({message: `Course with id ${req.params.id} deleted`, upatedCourses })
+ pool.query(sql, (err, rows) => {
+    if(err) return handleSQLError(err, res)
+    return res.send(`Deleted ${rows.affectedRows} course(s) with id ${req.params.id}`)
+ })
 
     
 }
