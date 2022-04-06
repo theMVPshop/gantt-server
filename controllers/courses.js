@@ -14,8 +14,8 @@ const getAllCourses = (req, res) => {
 }
 
 const getCoursesForCohort = (req, res) => {
-    let sql = `SELECT * FROM Courses WHERE Courses.course_id = ?`
-    sql = mysql.format[req.params.id]
+    let sql = `SELECT * FROM Courses WHERE Courses.cohort_id = ?`
+    sql = mysql.format(sql, [req.params.id])
     pool.query(sql, (err, rows) => {
         if(err) return handleSQLError(res, err)
         if(!rows.length) return res.status(404).send(`No courses for cohort with id ${req.params.id}`)
