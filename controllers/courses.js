@@ -102,26 +102,34 @@ const createCourseForCohort = (req, res) => {
 
 const updateCourse = (req, res) => {
     
-    const course = courses.find(course => course.course_id = req.params.id)
+    const { id }  = req.params
+    const { body } = req
+    
+    let sql = 'UPDATE Courses SET ? WHERE Courses.course_id'
+    sql = mysql.format(sql, [ body, id ])
 
-    course.cohort_id = req.body.cohort_id
-    course.course_number = req.body.course_number
-    course.hubspot_ticket = req.body.hubspot_ticket
-    course.instructor = req.body.instructor
-    course.teacher_assistant = req.body.teacher_assistant
-    course.mode = req.body.mode
-    course.course_link = req.body.course_link
-    course.rocketchat = req.body.rocketchat
-    course.start_date = req.body.start_date
-    course.end_date = req.body.end_date
-    course.location = req.body.location
-    course.day_of_week = req.body.day_of_week
-    course.active_status = req.body.active_status
-    course.student_number_start = req.body.student_number_start
-    course.student_number_end = req.body.student_number_end
+    pool.query(sql, (err,rows) => {
+        if(err) return handleSQLError(res, err)
+        res.send(`Course with id ${id} updated`)
+    })
 
-    res.json(course)
+    // course.cohort_id = req.body.cohort_id
+    // course.course_number = req.body.course_number
+    // course.hubspot_ticket = req.body.hubspot_ticket
+    // course.instructor = req.body.instructor
+    // course.teacher_assistant = req.body.teacher_assistant
+    // course.mode = req.body.mode
+    // course.course_link = req.body.course_link
+    // course.rocketchat = req.body.rocketchat
+    // course.start_date = req.body.start_date
+    // course.end_date = req.body.end_date
+    // course.location = req.body.location
+    // course.day_of_week = req.body.day_of_week
+    // course.active_status = req.body.active_status
+    // course.student_number_start = req.body.student_number_start
+    // course.student_number_end = req.body.student_number_end
 
+  
 }
 
 const deleteCourse = (req, res) => {
