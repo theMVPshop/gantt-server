@@ -19,7 +19,7 @@ const getAllUsers = (req, res) => {
 
 
 const getUser = (req, res) => {
-  let sql = "SELECT * FROM Users WHERE Users.user_id = ? AND Users.user_id IS NOT NULL"
+  let sql = "SELECT user_id, first_name, last_name, email FROM Users WHERE Users.user_id = ? AND Users.user_id IS NOT NULL"
   sql = mysql.format(sql, [req.params.id])
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err)
