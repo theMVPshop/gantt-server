@@ -82,7 +82,7 @@ const updateCourse = (req, res) => {
     const { id }  = req.params
     const { body } = req
     
-    let sql = 'UPDATE Courses SET ? WHERE Courses.course_id'
+    let sql = 'UPDATE Courses SET ? WHERE Courses.course_id = ?'
     sql = mysql.format(sql, [ body, id ])
 
     pool.query(sql, (err,rows) => {
