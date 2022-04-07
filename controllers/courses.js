@@ -78,7 +78,7 @@ const createCourseForCohort = (req, res) => {
 }
 
 const updateCourse = (req, res) => {
-    
+    // this had issues - need to fix
     const { id }  = req.params
     const { body } = req
     
