@@ -69,7 +69,13 @@ const updateTask = (req, res) => {
 }
 
 const deleteTask = (req, res) => {
+    let sql = 'DELETE FROM ?? WHERE ?? = ?'
+    sql = mysql.format(sql, ['Tasks', 'Tasks.id', req.params.id])
 
+    pool.query(sql, (err, rows) => {
+    if(err) return handleSQLError(err, res)
+    return res.send(`Deleted ${rows.affectedRows} task with id ${req.params.id}`)
+ })
 }
 
 module.exports = {
