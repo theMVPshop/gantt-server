@@ -6,6 +6,7 @@ const cors = require('cors');
 const usersRouter = require('./routers/users.js');
 const cohortsRouter = require('./routers/cohorts.js');
 const coursesRouter = require('./routers/courses.js');
+const tasksRouter = require('./routers/tasks.js');
 
 const app = express();
 app.use(cors())
@@ -29,6 +30,7 @@ app.use(function (req, res, next) {
 app.use('/users', usersRouter)
 app.use('/cohorts', cohortsRouter)
 app.use('/courses', coursesRouter)
+app.use('/tasks', tasksRouter)
 
 // TO DO: Create a /tasks route
 
