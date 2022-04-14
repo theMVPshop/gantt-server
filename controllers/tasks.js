@@ -10,6 +10,16 @@ const getTasks = (req, res) => {
     })
 }
 
+const getTask = (req, res) => {
+    let sql = `SELECT * FROM Tasks WHERE ?? = ?`
+    sql = mysql.format(sql, ["Tasks.id" , req.params.id])
+
+    pool.query(sql, (err, rows) => {
+        if(err) return handleSQLError(res, err)
+        return res.json(rows)
+    })
+}
+
 const createTask = (req, res) => {
    
     let sql = `INSERT INTO Tasks
@@ -80,6 +90,7 @@ const deleteTask = (req, res) => {
 
 module.exports = {
     getTasks,
+    getTask,
     createTask,
     updateTask,
     deleteTask
