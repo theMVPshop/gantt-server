@@ -12,7 +12,7 @@ const getTasks = (req, res) => {
 
 const getTask = (req, res) => {
     let sql = `SELECT * FROM Tasks WHERE ?? = ?`
-    sql = mysql.format(sql, ["Tasks.id" , req.params.id])
+    sql = mysql.format(sql, ["Tasks.task_id" , req.params.id])
 
     pool.query(sql, (err, rows) => {
         if(err) return handleSQLError(res, err)
@@ -23,7 +23,7 @@ const getTask = (req, res) => {
 const createTask = (req, res) => {
    
     let sql = `INSERT INTO Tasks
-    (gantt_id,
+    (id,
     title,
     start_date,
     end_date,
@@ -41,7 +41,7 @@ const createTask = (req, res) => {
     parent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
     sql = mysql.format(sql, [ 
-        req.body.gantt_id,
+        req.body.id,
         req.body.title,
         req.body.start_date,
         req.body.end_date,
@@ -69,7 +69,7 @@ const updateTask = (req, res) => {
        const { id }  = req.params
        const { body } = req
        
-       let sql = 'UPDATE Tasks SET ? WHERE Tasks.id = ?'
+       let sql = 'UPDATE Tasks SET ? WHERE Tasks.task_id = ?'
        sql = mysql.format(sql, [ body, id ])
    
        pool.query(sql, (err,rows) => {
@@ -80,7 +80,7 @@ const updateTask = (req, res) => {
 
 const deleteTask = (req, res) => {
     let sql = 'DELETE FROM ?? WHERE ?? = ?'
-    sql = mysql.format(sql, ['Tasks', 'Tasks.id', req.params.id])
+    sql = mysql.format(sql, ['Tasks', 'Tasks.task_id', req.params.id])
 
     pool.query(sql, (err, rows) => {
     if(err) return handleSQLError(err, res)
