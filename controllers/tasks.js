@@ -80,7 +80,7 @@ const updateTask = (req, res) => {
 
 const deleteTask = (req, res) => {
     let sql = 'DELETE FROM ?? WHERE ?? = ?'
-    sql = mysql.format(sql, ['Tasks', 'Tasks.task_id', req.params.id])
+    sql = mysql.format(sql, ['Tasks', 'Tasks.id', req.params.id])
 
     pool.query(sql, (err, rows) => {
     if(err) return handleSQLError(err, res)
