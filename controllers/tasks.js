@@ -69,7 +69,7 @@ const updateTask = (req, res) => {
        const { id }  = req.params
        const { body } = req
        
-       let sql = 'UPDATE Tasks SET ? WHERE Tasks.task_id = ?'
+       let sql = 'UPDATE Tasks SET ? WHERE Tasks.id = ?'
        sql = mysql.format(sql, [ body, id ])
    
        pool.query(sql, (err,rows) => {
