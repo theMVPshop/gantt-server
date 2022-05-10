@@ -68,8 +68,6 @@ const updateTask = (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
-  console.log(body);
-
   let sql = "UPDATE Tasks SET ? WHERE Tasks.id = ?";
   sql = mysql.format(sql, [body, id]);
 
@@ -80,8 +78,14 @@ const updateTask = (req, res) => {
 };
 
 const deleteTask = (req, res) => {
-  let sql = "DELETE FROM ?? WHERE ?? = ?";
-  sql = mysql.format(sql, ["Tasks", "Tasks.id", req.params.id]);
+  let sql = "DELETE FROM ?? WHERE ?? = ? OR ?? = ?";
+  sql = mysql.format(sql, [
+    "Tasks",
+    "Tasks.id",
+    req.params.id,
+    "Tasks.parent",
+    req.params.id,
+  ]);
 
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(err, res);
