@@ -8,6 +8,7 @@ const getTasks = (req, res) => {
     if (err) return handleSQLError(res, err);
     return res.json(rows);
   });
+  console.log("getTasks");
 };
 
 const getTask = (req, res) => {
@@ -18,6 +19,7 @@ const getTask = (req, res) => {
     if (err) return handleSQLError(res, err);
     return res.json(rows);
   });
+  console.log("getTask");
 };
 
 const createTask = (req, res) => {
@@ -62,6 +64,7 @@ const createTask = (req, res) => {
     if (err) return handleSQLError(res, err);
     return res.send(`New task created with id ${result.insertId}`);
   });
+  console.log("createTask");
 };
 
 const updateTask = (req, res) => {
@@ -75,6 +78,7 @@ const updateTask = (req, res) => {
     if (err) return handleSQLError(res, err);
     res.send(`Task with id ${id} updated`);
   });
+  console.log("updateTask");
 };
 
 const deleteTask = (req, res) => {
@@ -93,6 +97,7 @@ const deleteTask = (req, res) => {
       `Deleted ${rows.affectedRows} task with id ${req.params.id}`
     );
   });
+  console.log("deleteTask");
 };
 
 module.exports = {
