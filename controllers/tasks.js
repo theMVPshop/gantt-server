@@ -8,7 +8,6 @@ const getTasks = (req, res) => {
     if (err) return handleSQLError(res, err);
     return res.json(rows);
   });
-  console.log("getTasks");
 };
 
 const getTask = (req, res) => {
