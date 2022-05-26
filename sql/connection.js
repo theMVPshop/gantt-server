@@ -7,11 +7,11 @@ class Connection {
       console.log("creating connection...");
       this.pool = mysql.createPool({
         connectionLimit: 100,
-        Host: process.env.DB_HOST,
-        User: process.env.DB_USERNAME,
-        Password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
         // was DB_DEFAULT_SCHEMA before
-        Database: process.env.DB_DEFAULT_SCHEMA,
+        database: process.env.DB_DEFAULT_SCHEMA,
       });
 
       return this.pool;
