@@ -31,7 +31,7 @@ app.use("/users", usersRouter);
 app.use("/cohorts", cohortsRouter);
 app.use("/courses", coursesRouter);
 app.use("/tasks", tasksRouter);
-app.use("/holidays", holidaysRouter);
+app.use("/holiday", holidaysRouter);
 
 // TO DO: Create a /tasks route
 
