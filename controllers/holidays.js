@@ -12,7 +12,7 @@ const getHolidays = (req, res) => {
   });
 };
 
-const createCohort = (req, res) => {
+const createHoliday = (req, res) => {
   let sql = `INSERT INTO Holidays(text, start_date, end_date) 
       VALUES (?, ?, ?)`;
 
@@ -29,6 +29,6 @@ const createCohort = (req, res) => {
 };
 
 module.exports = {
-  createCohort,
+  createHoliday,
   getHolidays,
 };

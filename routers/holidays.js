@@ -1,8 +1,8 @@
 const express = require("express");
-const holidaysController = require("../controllers/holidaysController.js");
+const holidaysController = require("../controllers/holidays.js");
 const router = express.Router();
 
 router.get("/", holidaysController.getHolidays);
-router.post("/", holidaysController.createHolidays);
+router.post("/", holidaysController.createHoliday);
 
 module.exports = router;
