@@ -32,13 +32,14 @@ const createTask = (req, res) => {
     teacher_assistant, 
     mode, 
     course_link,
+    textbook,
     rocketchat,
     location,
     day_of_week,
     active_status,
     student_number_start,
     student_number_end,
-    parent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    parent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   sql = mysql.format(sql, [
     req.body.id,
@@ -50,6 +51,7 @@ const createTask = (req, res) => {
     req.body.teacher_assistant,
     req.body.mode,
     req.body.course_link,
+    req.body.textbook,
     req.body.rocketchat,
     req.body.location,
     req.body.day_of_week,
