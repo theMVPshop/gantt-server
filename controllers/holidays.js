@@ -13,12 +13,13 @@ const getHolidays = (req, res) => {
 };
 
 const createHoliday = (req, res) => {
-  let sql = `INSERT INTO Holidays(text, start_date, end_date) 
+  let sql = `INSERT INTO Holidays (start_date, text, end_date) 
       VALUES (?, ?, ?)`;
 
+  console.log(req.body);
   sql = mysql.format(sql, [
-    req.body.text,
     req.body.start_date,
+    req.body.text,
     req.body.end_date,
   ]);
 
