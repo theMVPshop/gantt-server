@@ -35,7 +35,7 @@ const deleteHoliday = (req, res) => {
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err);
     return res.json({
-      message: `deleted ${rows.affectedRows} Holiday with name ${req.params.text}`,
+      message: `deleted ${rows.affectedRows} Holiday with name ${req.body.text} and id ${req.params.id}`,
     });
   });
   console.log("deleteCohort");
