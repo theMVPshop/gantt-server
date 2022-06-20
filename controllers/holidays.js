@@ -29,7 +29,20 @@ const createHoliday = (req, res) => {
   });
 };
 
+const deleteHoliday = (req, res) => {
+  let sql = `DELETE FROM ?? WHERE ?? = ?`;
+  sql = mysql.format(sql, ["Holidays", "Holidays.id", req.params.id]);
+  pool.query(sql, (err, rows) => {
+    if (err) return handleSQLError(res, err);
+    return res.json({
+      message: `deleted ${rows.affectedRows} Holiday with name ${req.params.text}`,
+    });
+  });
+  console.log("deleteCohort");
+};
+
 module.exports = {
   createHoliday,
   getHolidays,
+  deleteHoliday,
 };
