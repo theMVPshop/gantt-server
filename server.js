@@ -2,8 +2,6 @@ require("dotenv").config();
 const express = require("express");
 
 const usersRouter = require("./routers/users.js");
-const cohortsRouter = require("./routers/cohorts.js");
-const coursesRouter = require("./routers/courses.js");
 const tasksRouter = require("./routers/tasks.js");
 const holidaysRouter = require("./routers/holidays.js");
 
@@ -28,8 +26,6 @@ app.use(function (req, res, next) {
 });
 
 app.use("/users", usersRouter);
-app.use("/cohorts", cohortsRouter);
-app.use("/courses", coursesRouter);
 app.use("/tasks", tasksRouter);
 app.use("/holidays", holidaysRouter);
 
